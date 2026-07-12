@@ -26,6 +26,7 @@ const register = async (req, res) => {
       username,
       email,
       password: hashPassword,
+      role: email === process.env.EMAIL_ADMIN ? 'admin' : 'user'
     })
 
     newUser.save()
@@ -34,6 +35,7 @@ const register = async (req, res) => {
       id: newUser._id,
       username: newUser.username,
       email: newUser.email,
+      role: newUser.role,
       createdAt: newUser.createdAt,
       updatedAt: newUser.updatedAt
     }
@@ -71,7 +73,7 @@ const login = async (req, res) => {
     }
 
     // TOKEN JWT → Json Web Token → string
-    const payload = { id: foundUser._id, username: foundUser.username, email: foundUser.email }
+    const payload = { id: foundUser._id, username: foundUser.username, email: foundUser.email, role: foundUser.role }
     const secretKey = process.env.JWT_SECRET
 
     const token = jwt.sign(payload, secretKey, { expiresIn: "1h" })

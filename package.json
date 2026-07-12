@@ -1,7 +1,7 @@
 {
-  "name": "api-express",
+  "name": "TP-final-express",
   "version": "1.0.0",
-  "description": "A simple API built with Express.js",
+  "description": "TP API with Express.js",
   "main": "app.js",
   "scripts": {
     "dev": "node --watch ./src/app.js"
@@ -11,7 +11,7 @@
     "api",
     "nodejs"
   ],
-  "author": "gabrielalberini",
+  "author": "Leonardo Andrade",
   "license": "ISC",
   "type": "module",
   "dependencies": {
@@ -21,6 +21,7 @@
     "express": "^5.2.1",
     "express-rate-limit": "^8.5.2",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.6.3"
+    "mongoose": "^9.6.3",
+    "zod": "^4.4.3"
   }
 }
