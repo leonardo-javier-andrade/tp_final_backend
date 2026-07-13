@@ -2,7 +2,7 @@ import { z } from "zod";
 
 
 // Validación de producto para crear y actualizar
-export const createProductSchema = z.object({
+const createProductSchema = z.object({
 
         // Validación de nombre
   name: z.string({ required_error: "El nombre es requerido" })
@@ -21,4 +21,6 @@ export const createProductSchema = z.object({
 });
 
 // Para actualizar, hacemos que todos los campos sean opcionales por si solo quieren editar uno
-export const updateProductSchema = createProductSchema.partial();
+const updateProductSchema = createProductSchema.partial();
+
+export { createProductSchema, updateProductSchema };

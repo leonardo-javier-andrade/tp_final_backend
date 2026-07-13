@@ -1,7 +1,7 @@
 import { z } from "zod";
 // Validación de usuario para registro y login
 
-export const registerSchema = z.object({
+const registerSchema = z.object({
     // Validación de nombre de usuario
   username: z.string({ required_error: "El nombre de usuario es requerido" })
              .min(3, "El usuario debe tener al menos 3 caracteres"),
@@ -19,7 +19,9 @@ export const registerSchema = z.object({
 });
  
 
-export const loginSchema = z.object({
+const loginSchema = z.object({
   email: z.string({ required_error: "El email es requerido" }).email("Email inválido"),
   password: z.string({ required_error: "La contraseña es requerida" })
 });
+
+export { registerSchema, loginSchema };
