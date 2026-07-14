@@ -5,16 +5,16 @@ import { z } from "zod";
 const createProductSchema = z.object({
 
         // Validación de nombre
-  name: z.string({ required_error: "El nombre es requerido" })
+  name: z.string( "El nombre es requerido" )
          .min(3, "El nombre debe tener al menos 3 caracteres"),
          // Validación de precio
-  price: z.number({ required_error: "El precio es requerido" })
+  price: z.number("El precio es requerido" )
           .nonnegative("El precio no puede ser un número negativo")
           .default(0),
           // Validación de categoría
   category: z.string().optional().default("Sin categoria"),
         // Validación de stock
-  stock: z.number({ required_error: "El stock es requerido" })
+  stock: z.number("El stock es requerido")
           .int("El stock debe ser un número entero")
           .nonnegative("El stock no puede ser negativo")
           .default(0)

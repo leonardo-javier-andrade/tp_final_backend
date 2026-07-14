@@ -76,12 +76,26 @@ const getProduct = async (req, res) => {
 
 const createProduct = async (req, res) => {
   try {
-
-    // obtencion de la informacion del producto a crear y del usuario 
     const body = req.body
     const userLogged = req.userLogged
 
-    
+    // 1. Buscamos si el usuario ya tiene un producto registrado con ese mismo nombre
+    // Usamos una expresión regular para que "Camioneta" y "camioneta" se consideren iguales
+    const existingProduct = await Product.findOne({
+      name: { $regex: new RegExp(`^${body.name.trim()}$`, "i") },
+      userId: userLogged.id
+    })
+
+    // 2. Si el producto ya existe para este usuario, devolvemos el mensaje sugerido
+    if (existingProduct) {
+      return res.status(409).json({
+        success: false,
+        data: null,
+        message: "Error al guardar el producto: ya existe un producto con ese nombre para este usuario"
+      })
+    }
+
+    // 3. Si no existe, procedemos a crearlo normalmente
     const newProduct = await Product.create({
       name: body.name,
       price: body.price,
@@ -91,8 +105,6 @@ const createProduct = async (req, res) => {
       userId: userLogged.id
     })
 
-
-    // eliminacion del userId del objeto para no exponerlo en la respuesta
     const { userId, ...publicDataProduct } = newProduct.toObject()
 
     res.json({
