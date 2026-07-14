@@ -5,15 +5,23 @@ const getProducts = async (req, res) => {
   try {
     const userLogged = req.userLogged
     
+    // extraccion los filtros de query params
+    const { category, search } = req.query;
+    
+    // Creamos un objeto con los filtros que el cliente decida usar
+    let filter = {};
+    if (category) filter.category = category;
+    if (search) filter.name = { $regex: search, $options: "i" };
+
     let viewProducts; 
 
     // si el usuario no es admin, solo puede ver sus productos, si es admin puede ver todos los productos
     if (userLogged.role !== "admin") {
 
-      viewProducts = await Product.find({ userId: userLogged.id }, { userId: 0 })
+      viewProducts = await Product.find({ userId: userLogged.id, ...filter }, { userId: 0 })
     } else {
     // si es admin, puede ver todos los productos, sin importar el usuario devolviendo el producto y el UserId creador
-      viewProducts = await Product.find({})
+      viewProducts = await Product.find(filter)
       
     
     }
@@ -81,14 +89,14 @@ const createProduct = async (req, res) => {
     const userLogged = req.userLogged
    
 
-    // 1. Buscamos si el usuario ya tiene un producto registrado con ese mismo nombre
+    //  Buscamos si el usuario ya tiene un producto registrado con ese mismo nombre
     // Usamos una expresión regular para que "Camioneta" y "camioneta" se consideren iguales
     const existingProduct = await Product.findOne({
       name: { $regex: new RegExp(`^${body.name.trim()}$`, "i") },
       userId: userLogged.id
     })
 
-    // 2. Si el producto ya existe para este usuario, devolvemos el mensaje sugerido
+    //  Si el producto ya existe para este usuario, devolvemos el mensaje sugerido
     if (existingProduct) {
       return res.status(409).json({
         success: false,
@@ -97,7 +105,7 @@ const createProduct = async (req, res) => {
       })
     }
 
-    // 3. Si no existe, procedemos a crearlo normalmente
+    //  Si no existe, procedemos a crearlo normalmente
     const newProduct = await Product.create({
       name: body.name,
       price: body.price,
