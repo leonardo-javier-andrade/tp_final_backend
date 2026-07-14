@@ -1,9 +1,9 @@
 import { Product } from "../models/ProductModel.js";
+import { User } from "../models/UserModel.js"
 
 const getProducts = async (req, res) => {
   try {
     const userLogged = req.userLogged
-    console.log("userLogged----------- informacion del usuario logueado para conseguir productos", userLogged)
     
     let viewProducts; 
 
@@ -12,11 +12,12 @@ const getProducts = async (req, res) => {
 
       viewProducts = await Product.find({ userId: userLogged.id }, { userId: 0 })
     } else {
+    // si es admin, puede ver todos los productos, sin importar el usuario devolviendo el producto y el UserId creador
+      viewProducts = await Product.find({})
+      
     
-      viewProducts = await Product.find({}, { userId: 0 })
     }
 
-   // respuesta de los productos encontrados, si no hay productos encontrados, devuelve un array vacío
 
     res.json({
       success: true,
@@ -78,6 +79,7 @@ const createProduct = async (req, res) => {
   try {
     const body = req.body
     const userLogged = req.userLogged
+   
 
     // 1. Buscamos si el usuario ya tiene un producto registrado con ese mismo nombre
     // Usamos una expresión regular para que "Camioneta" y "camioneta" se consideren iguales
@@ -102,10 +104,11 @@ const createProduct = async (req, res) => {
       category: body.category,
       stock: body.stock,
       available: body.stock > 0,
-      userId: userLogged.id
+      userId: userLogged.id,
+      email: userLogged.email
     })
 
-    const { userId, ...publicDataProduct } = newProduct.toObject()
+    const { userId, email, ...publicDataProduct } = newProduct.toObject()
 
     res.json({
       success: true,

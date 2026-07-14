@@ -6,7 +6,8 @@ const productSchema = new Schema({
   category: { type: String, default: "Sin categoria" },
   stock: { type: Number, default: 0 },
   available: { type: Boolean, default: false },
-  userId: { type: Schema.Types.ObjectId, ref: "User", required: true }
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  email: { type: String, required: true }
 }, {
   versionKey: false,
   timestamps: true
