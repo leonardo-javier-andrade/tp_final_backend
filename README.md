@@ -124,7 +124,7 @@ Todo usuario nuevo recibe el rol `user` salvo que su email coincida con `EMAIL_A
 - **`GET /products`**: recibe **todos** los productos de la base de datos sin filtrar por creador, y sin proyección: cada documento incluye tanto `userId` (el ObjectId del creador) como `email` (el email del creador, guardado en el propio producto). Es la única vista donde se puede identificar quién creó cada producto.
 - **`GET /products/:id`**, **`PUT /products/:id`**, **`DELETE /products/:id`**: puede operar sobre cualquier producto, sin importar quién lo creó. En estos endpoints el campo `userId` se excluye de la respuesta (tanto para admin como para user), aunque el campo `email` del creador sí queda visible.
 
-> En `POST /products`, la respuesta oculta tanto `userId` como `email` para **cualquier rol**, ya que es el propio usuario creando su producto y esa información no aporta valor en ese momento.
+
 
 Ejemplo de respuesta de `GET /products` para un **user**:
 
