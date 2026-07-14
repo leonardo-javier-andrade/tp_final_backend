@@ -1,6 +1,6 @@
 # API REST de Gestión de Productos con Autenticación y Roles
 
-API REST construida con **Node.js + Express 5** y **MongoDB Atlas (Mongoose)**, desarrollada como Trabajo Práctico Final del backend de UTN. Implementa registro/login con **JWT**, contraseñas encriptadas con **bcrypt**, control de acceso por roles (**user** / **admin**), validación de datos con **Zod**, rate limiting en el login y una regla de negocio que evita que un mismo usuario registre productos duplicados.
+API REST construida con **Node.js + Express ** y **MongoDB Atlas (Mongoose)**, desarrollada como Trabajo Práctico Final del backend de UTN. Implementa registro/login con **JWT**, contraseñas encriptadas con **bcrypt**, control de acceso por roles (**user** / **admin**), validación de datos con **Zod**, rate limiting en el login y una regla de negocio que evita que un mismo usuario registre productos duplicados.
 
 ## 📑 Tabla de contenidos
 
@@ -170,6 +170,27 @@ Ejemplo de respuesta de `GET /products` para un **admin** (incluye `userId` del 
   "message": "Products fetched successfully"
 }
 ```
+## 🔍 Búsqueda y filtrado (Query Params)
+
+El endpoint GET /products soporta parámetros de búsqueda dinámicos opcionales en la URL para refinar los resultados devueltos:
+
+### Parámetros de búsqueda disponibles:
+
+- **category** (Tipo: String): Filtra por coincidencia exacta de categoría.
+  *Ejemplo:* `?category=vehiculos`
+
+- **search** (Tipo: String): Búsqueda parcial e insensible a mayúsculas o minúsculas en el campo `name`.
+  *Ejemplo:* `?search=oso`
+
+### Combinación de filtros y seguridad:
+
+- Se pueden combinar múltiples parámetros utilizando el `carácter & (ej. ?search=oso&category=peluches)`.
+- Si un User aplica filtros, estos solo se evaluarán sobre los productos asociados a su propio userId.
+- Si un Admin aplica filtros, se evaluarán globalmente sobre toda la colección de la base de datos.
+- Si no se envía ningún query param, la API devolverá la totalidad de los productos correspondientes según el rol, sin filtros adicionales.
+
+
+
 
 ## 🛡️ Validación de datos con Zod
 
